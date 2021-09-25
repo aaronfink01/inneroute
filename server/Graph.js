@@ -1,5 +1,3 @@
-import PriorityQueue from "./PriorityQueue.js";
-
 //Nodes currently stored as "lat,long" strings 
 //This whole object map thingy does not work well with anything other than 
 //strings unfortunately 

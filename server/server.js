@@ -111,7 +111,6 @@ app.get('/route', async (req, res) => {
       buildings: buildings,
       status: "OK"
     }
-    // res.send("done")
     res.send(result)
   }
 
