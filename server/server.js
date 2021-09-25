@@ -26,7 +26,7 @@ function asyncGetDirections(start, end) {
         params: {
           origin: start[0] + "," + start[1],
           destination: end[0] + "," + end[1],
-          mode: "walking", //WHY ISN'T THIS WORKING. FUCK
+          mode: "walking",
           key: apiKey
         }
       }).then((response) => {
