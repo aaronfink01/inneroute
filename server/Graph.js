@@ -60,12 +60,14 @@ export default class Graph {
       }
     }
   }
-  nodesToDescriptions(nodes) {
-    let description = ""
-    for (let i = 0; i < nodes.length - 1; i++) {
-      let from = nodes[i]
-
+  nodesToDescriptions(nodes, acc) {
+    if (nodes.length == 1) {
+      return acc
     }
-  }
 
+    acc += this.edges[nodes[0]].find((v) => v.node == nodes[1]).instruction + " "
+    nodes.shift()
+
+    return this.nodesToDescriptions(nodes, acc)
+  }
 }

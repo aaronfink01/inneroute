@@ -62,7 +62,9 @@ function asyncGetAllDirections(pairs) {
 }
 
 app.get("/test", (req, res) => {
-  console.log(JSON.stringify(makeUrisGraph()))
+  const graph = makeUrisGraph();
+  const result = graph.search(5, 3);
+  res.send(graph.nodesToDescriptions(result, ""))
 })
 
 app.get('/route', async (req, res) => {
