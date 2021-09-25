@@ -52,10 +52,6 @@ function asyncGetDirections(start, end) {
   })
 }
 
-//Can only deal with lat long pairs
-//Need to eventually provide functionality to
-//detect if something is a placeid instead
-//and convert placeid to lat long len 2 array 
 function asyncGetAllDirections(pairs) {
   const promises = [];
   for (let i = 0; i < pairs.length; i++) {
@@ -65,8 +61,12 @@ function asyncGetAllDirections(pairs) {
 }
 
 app.get('/route', async (req, res) => {
-  const start = [42.449976139057476, -76.48274672771011]
-  const end = [42.448035165071644, -76.48276744033144]
+  const startQuery = req.query.start
+  const endQuery = req.query.end
+  const start = startQuery.split(",")
+  const end = endQuery.split(",")
+
+  let legData = {}
 
   let g = getConstantGraph()
   g.addNode(start[0] + "," + start[1])
@@ -77,6 +77,7 @@ app.get('/route', async (req, res) => {
 
   for (let i = 0; i < result.length; i++) {
     let edgeInfo = result[i]
+    legData[(toString(edgeInfo.start) + ";" + toString(edgeInfo.end))] = edgeInfo.legs
     g.addDirectedEdge(toString(edgeInfo.start), toString(edgeInfo.end), edgeInfo.duration)
   }
 
@@ -98,32 +99,21 @@ app.get('/route', async (req, res) => {
         currentLeg = []
       }
     } else {
-      currentLeg.push({
-
-      })
+      currentLeg = currentLeg.concat(
+        legData[s + ";" + e]
+      )
     }
+    if (currentLeg.length > 0) {
+      legs.push(currentLeg)
+    }
+    let result = {
+      legs: legs,
+      buildings: buildings,
+      status: "OK"
+    }
+    // res.send("done")
+    res.send(result)
   }
 
-
-
-  // const start = (req["start"][0], req["start"][1])
-  // const end = (req["end"][0], req["end"][1])
-
-  //stuff in between our predefined points that never changes
-  // let g = getConstantGraph();
-  // g.printGraph();
-
-  //To implement: 
-  //Get constant portion of graph 
-  //Retrieve and store non constant times using Promise + add edges to graph 
-  //  Probably want some way of storing the actual legs so we don't have to
-  //  duplicate fetches 
-  //Graph search / Dijkstra (?) shortest path 
-  // Retrieve node paths 
-  // For each node, extract lat long from string 
-  // If weight on graph is 0, add node to a list of our nodes 
-  // If weight on graph is not 0, it is a gmaps returned object 
-
-  res.send("done")
 })
 
