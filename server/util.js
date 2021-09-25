@@ -84,17 +84,3 @@ export const getConstantGraph = () => {
 
   return g;
 }
-
-//Return all pairs for which we must call the api for 
-//(dependent on the user start / end locations)
-export const getPairs = (start, end) => {
-  let pairs = [];
-  for (const buildingName in doors) {
-    const building = doors[buildingName]
-    for (let i = 0; i < building.length; i++) {
-      pairs.push([start, building[i]])
-      pairs.push([building[i], end])
-    }
-  }
-  return pairs
-}
