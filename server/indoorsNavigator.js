@@ -8,3 +8,10 @@ export const makeUrisGraph = () => {
   g.addAdjacencyMatrix(uris)
   return g
 }
+
+export const getIndoorGraph = (buildingName) => {
+  if (buildingName == "UrisHall") {
+    return makeUrisGraph()
+  }
+  else return new Graph()
+}

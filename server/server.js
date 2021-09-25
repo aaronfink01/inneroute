@@ -6,7 +6,8 @@ const https = require('https')
 require("dotenv").config()
 
 import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
-import { makeUrisGraph } from './indoorsNavigator.js';
+import { makeUrisGraph, getIndoorGraph } from './indoorsNavigator.js';
+import { latlongToIndex } from "./internalmaps.js"
 
 const app = express()
 const port = 3000
@@ -98,9 +99,14 @@ app.get('/route', async (req, res) => {
     const e = path[i + 1]
     let buildingName = sameBuilding(s, e)
     if (buildingName != "") {
+      let g = getIndoorGraph(buildingName)
+      let latLongMap = latlongToIndex[buildingName]
+      let nodes = g.search(latLongMap[s], latLongMap[e])
+      let description = g.nodesToDescriptions(nodes)
       buildings.push({
         "from": { "lat": parseFloat(s.split(",")[0]), "lng": parseFloat(s.split(",")[1]) },
-        "to": { "lat": parseFloat(e.split(",")[0]), "lng": parseFloat(e.split(",")[1]) }
+        "to": { "lat": parseFloat(e.split(",")[0]), "lng": parseFloat(e.split(",")[1]) },
+        "description": description
       })
       if (currentLeg.length > 0) {
         legs.push(currentLeg)
