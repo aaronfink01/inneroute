@@ -60,4 +60,12 @@ export default class Graph {
       }
     }
   }
+  nodesToDescriptions(nodes) {
+    let description = ""
+    for (let i = 0; i < nodes.length - 1; i++) {
+      let from = nodes[i]
+
+    }
+  }
+
 }

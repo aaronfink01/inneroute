@@ -48,3 +48,20 @@ export const data = {
     ]
   ]
 }
+
+export const latlongToIndex = {
+  "UrisHall": [
+    {
+      "latlong": "42.44739113622921,-76.48193314453428",
+      "index": 0
+    },
+    {
+      "latlong": "42.44700992562832,-76.48221781037817",
+      "index": 3
+    },
+    {
+      "latlong": "42.44742622033418,-76.48220070314869",
+      "index": 5
+    }
+  ]
+}

@@ -94,7 +94,8 @@ app.get('/route', async (req, res) => {
   for (let i = 0; i < path.length - 1; i++) {
     const s = path[i]
     const e = path[i + 1]
-    if (sameBuilding(s, e)) {
+    let buildingName = sameBuilding(s, e)
+    if (buildingName != "") {
       buildings.push({
         "from": { "lat": parseFloat(s.split(",")[0]), "lng": parseFloat(s.split(",")[1]) },
         "to": { "lat": parseFloat(e.split(",")[0]), "lng": parseFloat(e.split(",")[1]) }

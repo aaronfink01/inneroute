@@ -20,10 +20,10 @@ export const sameBuilding = (start, end) => {
       if (toString(building[i]) == start || toString(building[i]) == end) {
         for (let j = i + 1; j < building; j++) {
           if (toString(building[i]) == start || toString(building[i]) == end) {
-            return true
+            return buildingName
           }
         }
-        return false
+        return ""
       }
     }
   }
