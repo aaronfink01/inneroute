@@ -6,7 +6,6 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Inneroute!</Text>
       <StatusBar style="auto" />
       <FancyMap />
     </View>
