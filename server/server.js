@@ -36,12 +36,11 @@ function asyncGetDirections(start, end) {
         let duration = data["routes"][0]["legs"][0]["duration"]["text"]
         let duration_float = parseFloat(duration.substring(0, duration.indexOf(' ')))
         if (status == "OK") {
-          resolve(true);
-          return {
+          resolve({
             status: status,
             legs: legs,
             duration: duration_float
-          }
+          });
         }
         resolve(false);
       }).catch((e) => {
@@ -49,7 +48,6 @@ function asyncGetDirections(start, end) {
         console.log(e.response.data.error_message)
       })
   })
-
 }
 
 //Can only deal with lat long pairs
@@ -67,6 +65,11 @@ function asyncGetAllDirections(pairs) {
 app.get('/route', (req, res) => {
   const start = [42.449976139057476, -76.48274672771011]
   const end = [42.448035165071644, -76.48276744033144]
+
+  // asyncGetAllDirections(getPairs(start, end)).then((value) =>
+  //   console.log(value)
+  // )
+  console.log(JSON.stringify(getConstantGraph()))
 
   // const start = (req["start"][0], req["start"][1])
   // const end = (req["end"][0], req["end"][1])
