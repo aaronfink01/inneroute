@@ -26,7 +26,7 @@ function asyncGetDirections(start, end) {
         params: {
           origin: start[0] + "," + start[1],
           destination: end[0] + "," + end[1],
-          travelMode: "WALKING", //WHY ISN'T THIS WORKING. FUCK
+          mode: "walking", //WHY ISN'T THIS WORKING. FUCK
           key: apiKey
         }
       }).then((response) => {
@@ -58,8 +58,8 @@ function asyncGetDirections(start, end) {
 //and convert placeid to lat long len 2 array 
 function asyncGetAllDirections(pairs) {
   const promises = [];
-  for (let pair in pairs) {
-    promises.push(asyncGetDirections(pair[0], pair[1]))
+  for (let i = 0; i < pairs.length; i++) {
+    promises.push(asyncGetDirections(pairs[i][0], pairs[i][1]))
   }
   return Promise.all(promises)
 }
@@ -72,8 +72,8 @@ app.get('/route', (req, res) => {
   // const end = (req["end"][0], req["end"][1])
 
   //stuff in between our predefined points that never changes
-  let g = getConstantGraph();
-  g.printGraph();
+  // let g = getConstantGraph();
+  // g.printGraph();
 
   //To implement: 
   //Get constant portion of graph 
