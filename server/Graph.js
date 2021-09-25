@@ -17,8 +17,24 @@ export default class Graph {
     this.edges[node2].push({ node: node1, weight: weight });
   }
 
-  addDirectedEdge(node1, node2, weight = 1) {
-    this.edges[node1].push({ node: node2, weight: weight });
+  addDirectedEdge(node1, node2, weight, instruction = "") {
+    this.edges[node1].push({ node: node2, weight: weight, instruction: instruction });
+  }
+
+  addAdjacencyMatrix(matrix) {
+    // Add the nodes
+    for (let i = 0; i < matrix.length; i++) {
+      this.addNode(i + "")
+    }
+
+    // Add the edges
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        if (matrix[i][j] != null) {
+          this.addDirectedEdge(i, j, 1, matrix[i][j])
+        }
+      }
+    }
   }
 
   printGraph() {

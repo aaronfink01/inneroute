@@ -6,6 +6,7 @@ const https = require('https')
 require("dotenv").config()
 
 import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
+import { makeUrisGraph } from './indoorsNavigator.js';
 
 const app = express()
 const port = 3000
@@ -59,6 +60,10 @@ function asyncGetAllDirections(pairs) {
   }
   return Promise.all(promises)
 }
+
+app.get("/test", (req, res) => {
+  console.log(JSON.stringify(makeUrisGraph()))
+})
 
 app.get('/route', async (req, res) => {
   const startQuery = req.query.start
