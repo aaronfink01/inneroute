@@ -13,6 +13,22 @@ const doors = {
   ]
 }
 
+export const sameBuilding = (start, end) => {
+  for (const buildingName in doors) {
+    const building = doors[buildingName]
+    for (let i = 0; i < building; i++) {
+      if (toString(building[i]) == start || toString(building[i]) == end) {
+        for (let j = i + 1; j < building; j++) {
+          if (toString(building[i]) == start || toString(building[i]) == end) {
+            return true
+          }
+        }
+        return false
+      }
+    }
+  }
+}
+
 //stuff we should probably just calculate once and not every single time
 //idk though might be annoying to have to define all of these literally
 //also don't know how to key these things 
@@ -26,7 +42,7 @@ const between = [
 ]
 
 //get non constant edges given start and end
-function getEdges(start, end) {
+export const getEdges = (start, end) => {
   let edges = []
 
   for (const buildingName in doors) {
@@ -40,7 +56,7 @@ function getEdges(start, end) {
   return edges;
 }
 
-function toString(coord) {
+export const toString = (coord) => {
   return coord[0] + "," + coord[1]
 }
 

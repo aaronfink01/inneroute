@@ -31,40 +31,19 @@ export default class Graph {
     console.log(graph);
   }
 
-  //https://medium.com/@adriennetjohnson/a-walkthrough-of-dijkstras-algorithm-in-javascript-e94b74192026
-  //Absolutely not a clue if this implementation is actually right
-  //We might wanna rewrite this
-  djikstraAlgorithm(startNode, endNode) {
-    let times = {};
-    let backtrace = {};
-    let pq = new PriorityQueue();
-
-    times[startNode] = 0;
-
-    this.nodes.forEach(node => {
-      if (node !== startNode) {
-        times[node] = Infinity
+  // Returns a list of nodes in string form where the first is start and last is end
+  search(start, end) {
+    let queue = [{ "distance": 0, "path": [start] }]
+    while (queue.length > 0) {
+      const node = queue.shift()
+      const lastNodeInPath = node.path[node.path.length - 1]
+      if (lastNodeInPath == end) {
+        return node.path
       }
-    });
-    pq.enqueue([startNode, 0]);
-    while (!pq.isEmpty()) {
-      let shortestStep = pq.dequeue();
-      let currentNode = shortestStep[0];
-      this.edges[currentNode].forEach(neighbor => {
-        let time = times[currentNode] + neighbor.weight;
-        if (time < times[neighbor.node]) {
-          times[neighbor.node] = time;
-          backtrace[neighbor.node] = currentNode;
-          pq.enqueue([neighbor.node, time]);
-        }
-      });
+      for (let i = 0; i < this.edges[lastNodeInPath].length; i++) {
+        const edge = this.edges[lastNodeInPath][i]
+        queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]) })
+      }
     }
-    let path = [endNode];
-    let lastStep = endNode;
-    while (lastStep !== startNode) {
-      path.unshift(backtrace[lastStep])
-      lastStep = backtrace[lastStep]
-    }
-    return path;
   }
 }

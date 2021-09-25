@@ -5,7 +5,7 @@ const express = require('express')
 const https = require('https')
 require("dotenv").config()
 
-import { getConstantGraph, getPairs } from "./util.js"
+import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
 
 const app = express()
 const port = 3000
@@ -37,6 +37,8 @@ function asyncGetDirections(start, end) {
         let duration_float = parseFloat(duration.substring(0, duration.indexOf(' ')))
         if (status == "OK") {
           resolve({
+            start: start,
+            end: end,
             status: status,
             legs: legs,
             duration: duration_float
@@ -62,14 +64,47 @@ function asyncGetAllDirections(pairs) {
   return Promise.all(promises)
 }
 
-app.get('/route', (req, res) => {
+app.get('/route', async (req, res) => {
   const start = [42.449976139057476, -76.48274672771011]
   const end = [42.448035165071644, -76.48276744033144]
 
-  // asyncGetAllDirections(getPairs(start, end)).then((value) =>
-  //   console.log(value)
-  // )
-  console.log(JSON.stringify(getConstantGraph()))
+  let g = getConstantGraph()
+  g.addNode(start[0] + "," + start[1])
+  g.addNode(end[0] + "," + end[1])
+  const edges = getEdges(start, end)
+  edges.push([start, end])
+  let result = await asyncGetAllDirections(edges)
+
+  for (let i = 0; i < result.length; i++) {
+    let edgeInfo = result[i]
+    g.addDirectedEdge(toString(edgeInfo.start), toString(edgeInfo.end), edgeInfo.duration)
+  }
+
+  const path = g.search(toString(start), toString(end))
+
+  let legs = []
+  let currentLeg = []
+  let buildings = []
+  for (let i = 0; i < path.length - 1; i++) {
+    const s = path[i]
+    const e = path[i + 1]
+    if (sameBuilding(s, e)) {
+      buildings.push({
+        "from": { "lat": parseFloat(s.split(",")[0]), "lng": parseFloat(s.split(",")[1]) },
+        "to": { "lat": parseFloat(e.split(",")[0]), "lng": parseFloat(e.split(",")[1]) }
+      })
+      if (currentLeg.length > 0) {
+        legs.push(currentLeg)
+        currentLeg = []
+      }
+    } else {
+      currentLeg.push({
+
+      })
+    }
+  }
+
+
 
   // const start = (req["start"][0], req["start"][1])
   // const end = (req["end"][0], req["end"][1])
