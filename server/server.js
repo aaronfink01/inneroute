@@ -1,10 +1,13 @@
 const express = require('express')
 const https = require('https')
+require("dotenv").config()
 
 const app = express()
 const port = 3000
 
-const apiKey = "AIzaSyCOnl00PN60bc6Z5uq8UwuZDtoA6chzMnY"
+const apiKey = process.env.API_KEY
+const { Client } = require("@googlemaps/google-maps-services-js");
+const client = new Client({});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
@@ -23,6 +26,7 @@ const doors = {
   ]
 }
 
+
 app.get('/route', (req, res) => {
   // const start = (req.start.lat, req.start.long)
   const start = [42.449976139057476, -76.48274672771011]
@@ -30,18 +34,29 @@ app.get('/route', (req, res) => {
 
   let edges = []
 
-  // start to everything
   for (const buildingName in doors) {
     const building = doors[buildingName]
     for (let i = 0; i < building.length; i++) {
       const coords = building[i]
-      url = "https://maps/googleapis.com/maps/api/directions/json?origin=" + start[0] + "," + start[1] + "&destination=" + coords[0] + "," + coords[1] + "&mode=walking&key=" + apiKey
-      let xhr = new XMLHttpRequest()
-      xhr.open("GET", url)
-      xhr.send()
-      xhr.onload = function () {
-        console.log(xhr.response)
-      }
+      client
+        .directions({
+          params: {
+            origin: start[0] + "," + start[1],
+            destination: coords[0] + "," + coords[1],
+            travelMode: "WALKING",
+            key: apiKey
+          }
+        }).then((response) => {
+          let data = response["data"]
+          let legs = data["routes"][0]["legs"][0]["steps"]
+          let status = data["status"]
+          return {
+            status: status,
+            legs: legs
+          }
+        }).catch((e) => {
+          console.log(e.response.data.error_message)
+        })
     }
   }
 
