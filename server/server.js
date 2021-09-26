@@ -6,7 +6,7 @@ const https = require('https')
 require("dotenv").config()
 
 import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
-import { makeUrisGraph, getIndoorGraph } from './indoorsNavigator.js';
+import { getIndoorGraph } from './indoorsNavigator.js';
 import { latlongToIndex } from "./internalmaps.js"
 
 const app = express()
@@ -63,8 +63,8 @@ function asyncGetAllDirections(pairs) {
 }
 
 app.get("/test", (req, res) => {
-  const graph = makeUrisGraph();
-  const result = graph.search(5, 3);
+  const graph = getIndoorGraph("Statler");
+  const result = graph.search(4, 8);
   res.send(graph.nodesToDescriptions(result, ""))
 })
 
