@@ -59,7 +59,7 @@ export default class Graph {
 
   // Returns a list of nodes in string form where the first is start and last is end
   search(start, end) {
-    let queue = [{ "distance": 0, "path": [start] }]
+    let queue = [{ "distance": 0, "path": [start], "lastEdgeWasInterior": false }]
     while (queue.length > 0) {
       const node = this.priority(queue)
       const lastNodeInPath = node.path[node.path.length - 1]
@@ -78,8 +78,9 @@ export default class Graph {
             found = true
           }
         }
-        if (!found) {
-          queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]) })
+
+        if (!found && (edge.distance == 0) != (node.lastEdgeWasInterior)) {
+          queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]), "lastEdgeWasInterior": edge.distance == 0 })
         }
       }
     }
