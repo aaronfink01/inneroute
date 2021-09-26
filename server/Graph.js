@@ -73,14 +73,20 @@ export default class Graph {
           if (queue[j].path[queue[j].path.length - 1] == edge.node) {
             if (node.distance + edge.weight < queue[j].distance) {
               queue[j].distance = node.distance + edge.weight
+              queue[j].path = node.path.concat([edge.node])
+              if (edge.weight == 0) {
+                queue[j].lastEdgeWasInterior = true
+              } else {
+                queue[j].lastEdgeWasInterior = false
+              }
               break
             }
             found = true
           }
         }
 
-        if (!found && (edge.distance == 0) != (node.lastEdgeWasInterior)) {
-          queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]), "lastEdgeWasInterior": edge.distance == 0 })
+        if (!found && !(edge.weight == 0 && node.lastEdgeWasInterior)) {
+          queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]), "lastEdgeWasInterior": edge.weight == 0 })
         }
       }
     }
