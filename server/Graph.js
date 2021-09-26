@@ -84,6 +84,8 @@ export default class Graph {
         }
       }
     }
+
+    throw new Error("While finished")
   }
   nodesToDescriptions(nodes, acc) {
     if (nodes.length == 1) {
