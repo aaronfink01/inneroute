@@ -119,12 +119,12 @@ app.get('/route', async (req, res) => {
     const s = path[i]
     const e = path[i + 1]
     let buildingName = sameBuilding(s, e)
-    console.log("BLDG ANME", buildingName)
+
     if (buildingName != "") {
       let g = getIndoorGraph(buildingName)
       let latLongMap = latlongToIndex[buildingName]
       let nodes = g.search(latLongMap[s], latLongMap[e])
-      console.log(latLongMap)
+
       let description = g.nodesToDescriptions(nodes, "")
       buildings.push({
         "from": { "lat": parseFloat(s.split(",")[0]), "lng": parseFloat(s.split(",")[1]) },

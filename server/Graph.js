@@ -74,11 +74,7 @@ export default class Graph {
             if (node.distance + edge.weight < queue[j].distance) {
               queue[j].distance = node.distance + edge.weight
               queue[j].path = node.path.concat([edge.node])
-              if (edge.weight == 0) {
-                queue[j].lastEdgeWasInterior = true
-              } else {
-                queue[j].lastEdgeWasInterior = false
-              }
+              queue[j].lastEdgeWasInterior = (edge.weight == 0)
               break
             }
             found = true
