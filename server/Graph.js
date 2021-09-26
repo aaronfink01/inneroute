@@ -45,11 +45,23 @@ export default class Graph {
     console.log(graph);
   }
 
+  priority(queue) {
+    let best = 0
+    for (let i = 1; i < queue.length; i++) {
+      if (queue[i].distance < queue[best].distance) {
+        best = i
+      }
+    }
+    let result = queue[best]
+    queue.splice(best, 1)
+    return result
+  }
+
   // Returns a list of nodes in string form where the first is start and last is end
   search(start, end) {
     let queue = [{ "distance": 0, "path": [start] }]
     while (queue.length > 0) {
-      const node = queue.shift()
+      const node = this.priority(queue)
       const lastNodeInPath = node.path[node.path.length - 1]
       if (lastNodeInPath == end) {
         return node.path

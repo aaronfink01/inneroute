@@ -9,6 +9,7 @@ import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
 import { getIndoorGraph } from './indoorsNavigator.js';
 import { latlongToIndex } from "./internalmaps.js"
 import { between } from './betweens.js';
+import Graph from "./Graph.js"
 
 const app = express()
 const port = 3000
@@ -64,9 +65,21 @@ function asyncGetAllDirections(pairs) {
 }
 
 app.get("/test", (req, res) => {
-  const graph = getIndoorGraph("Statler");
-  const result = graph.search(4, 8);
-  res.send(graph.nodesToDescriptions(result, ""))
+  const graph = new Graph()
+  graph.addNode("a")
+  graph.addNode("b")
+  graph.addNode("c")
+  graph.addNode("d")
+  graph.addNode("e")
+  graph.addNode("f")
+  graph.addDirectedEdge("a", "e", 1)
+  graph.addDirectedEdge("e", "c", 1)
+  graph.addDirectedEdge("a", "c", 3)
+  graph.addDirectedEdge("c", "d", 5)
+  graph.addDirectedEdge("c", "f", 2)
+  graph.addDirectedEdge("f", "b", 3)
+  graph.addDirectedEdge("d", "b", 4)
+  console.log(graph.search("a", "b"))
 })
 
 app.get('/route', async (req, res) => {
