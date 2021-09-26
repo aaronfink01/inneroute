@@ -37,14 +37,16 @@ function asyncGetDirections(start, end) {
         let legs = data["routes"][0]["legs"][0]["steps"]
         let status = data["status"]
         let duration = data["routes"][0]["legs"][0]["duration"]["text"]
-        let duration_float = parseFloat(duration.substring(0, duration.indexOf(' ')))
+        let durationFloat = parseFloat(duration.substring(0, duration.indexOf(' ')))
+        let leftOver = parseFloat(data["routes"][0]["legs"][0]["duration"]["value"])
+        let total = (durationFloat * 60) + leftOver
         if (status == "OK") {
           resolve({
             start: start,
             end: end,
             status: status,
             legs: legs,
-            duration: duration_float
+            duration: total
           });
         }
         resolve(false);
