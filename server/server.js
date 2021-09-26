@@ -8,6 +8,7 @@ require("dotenv").config()
 import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
 import { getIndoorGraph } from './indoorsNavigator.js';
 import { latlongToIndex } from "./internalmaps.js"
+import { between } from './betweens.js';
 
 const app = express()
 const port = 3000
@@ -82,6 +83,11 @@ app.get('/route', async (req, res) => {
   const edges = getEdges(start, end)
   edges.push([start, end])
   let result = await asyncGetAllDirections(edges)
+
+  for (let i = 0; i < between.length; i++) {
+    let edgeInfo = between[i]
+    legData[(toString(edgeInfo.start) + ";" + toString(edgeInfo.end))] = edgeInfo.legs
+  }
 
   for (let i = 0; i < result.length; i++) {
     let edgeInfo = result[i]

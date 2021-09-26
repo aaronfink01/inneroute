@@ -1,5 +1,7 @@
 import Graph from "./Graph.js"
 
+import { between } from "./betweens.js"
+
 const doors = {
   // "Physical Sciences Building": [
   //   [42.449682606675125, -76.48214083419506],
@@ -58,18 +60,6 @@ export const sameBuilding = (start, end) => {
   }
 }
 
-//stuff we should probably just calculate once and not every single time
-//idk though might be annoying to have to define all of these literally
-//also don't know how to key these things 
-//Currently subbing in dummy times
-const between = [
-  [[42.449682606675125, -76.48214083419506], [42.44909838547849, -76.48303531991415], 3],
-  [[42.449682606675125, -76.48214083419506], [42.449074548998766, -76.48363617647365], 5],
-  [[42.450450501498565, -76.48215424523666], [42.44909838547849, -76.48303531991415], 2],
-  [[42.450450501498565, -76.48215424523666], [42.449074548998766, -76.48363617647365], 4],
-  //etc. 
-]
-
 //get non constant edges given start and end
 export const getEdges = (start, end) => {
   let edges = []
@@ -114,7 +104,7 @@ export const getConstantGraph = () => {
   // Add the edges between doors in different buildings
   for (let i = 0; i < between.length; i++) {
     let info = between[i];
-    g.addDirectedEdge(toString(info[0]), toString(info[1]), info[2]);
+    g.addDirectedEdge(toString(info.start), toString(info.end), info.duration);
   }
 
   // Add the edges between doors in the same building
