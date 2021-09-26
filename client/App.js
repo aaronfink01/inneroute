@@ -5,11 +5,16 @@ import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import GooglePlacesInput from './components/PlaceInput';
 import * as Location from 'expo-location';
+import { LocationAccuracy } from 'expo-location';
+
+const makeurl = ([originLat, originLng], [destLat, destLng]) => (
+  `https://3cd6-128-84-126-139.ngrok.io/route?start=${originLat},${originLng}&end=${destLat},${destLng}`
+)
 
 export default function App() {
-  const [location, setLocation] = React.useState();
-  const [hasLocation, setHasLocation] = React.useState(false);
-  const [destination, setDestination] = React.useState(null)
+  const [destination, setDestination] = React.useState(null);
+  const [data, setData] = React.useState(null)
+  const [loading, setLoading] = React.useState(false)
 
   React.useEffect(() => {
     (async () => {
@@ -18,16 +23,27 @@ export default function App() {
         alert('Inneroute needs access to your location for routing purposes.');
         return;
       }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setHasLocation(true)
     })();
   }, []);
 
-  function fetchLocation(details, data) {
-    console.log(details, data)
+  const fetchLocation = async (details, data) => {
     setDestination({ details, data })
+    setLoading(true)
+
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: LocationAccuracy.Low
+    });
+
+    let url = makeurl(
+      [location.coords.latitude, location.coords.longitude],
+      [data.geometry.location.lat, data.geometry.location.lng]
+    )
+
+    const result = await fetch(url)
+    const json = await result.json();
+
+    setData(json)
+    setLoading(false)
   }
 
   return (
@@ -36,7 +52,7 @@ export default function App() {
       <View style={styles.input}>
         <GooglePlacesInput setLocation={fetchLocation} />
       </View>
-      <FancyMap styles={styles.fancyMap} currentLocation={location} destination={destination} />
+      <FancyMap styles={styles.fancyMap} destination={destination} route={data} />
     </View>
   );
 }
