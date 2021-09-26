@@ -104,6 +104,7 @@ app.get('/route', async (req, res) => {
     const s = path[i]
     const e = path[i + 1]
     let buildingName = sameBuilding(s, e)
+    console.log(buildingName)
     if (buildingName != "") {
       let g = getIndoorGraph(buildingName)
       let latLongMap = latlongToIndex[buildingName]

@@ -47,10 +47,10 @@ const doors = {
 export const sameBuilding = (start, end) => {
   for (const buildingName in doors) {
     const building = doors[buildingName]
-    for (let i = 0; i < building; i++) {
+    for (let i = 0; i < building.length; i++) {
       if (toString(building[i]) == start || toString(building[i]) == end) {
-        for (let j = i + 1; j < building; j++) {
-          if (toString(building[i]) == start || toString(building[i]) == end) {
+        for (let j = i + 1; j < building.length; j++) {
+          if (toString(building[j]) == start || toString(building[j]) == end) {
             return buildingName
           }
         }
@@ -58,6 +58,7 @@ export const sameBuilding = (start, end) => {
       }
     }
   }
+  return ""
 }
 
 //get non constant edges given start and end
