@@ -80,6 +80,7 @@ app.get("/test", (req, res) => {
   graph.addDirectedEdge("f", "b", 3)
   graph.addDirectedEdge("d", "b", 4)
   console.log(graph.search("a", "b"))
+  res.send("finished test")
 })
 
 app.get('/route', async (req, res) => {

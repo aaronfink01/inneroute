@@ -68,7 +68,16 @@ export default class Graph {
       }
       for (let i = 0; i < this.edges[lastNodeInPath].length; i++) {
         const edge = this.edges[lastNodeInPath][i]
-        queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]) })
+        let found = false
+        for (let j = 0; j < queue.length; j++) {
+          if (queue[j].path[queue[j].path.length - 1] == edge.node) {
+            queue[j].distance = min(queue[j].distance, node.distance + edge.weight)
+            found = true
+          }
+        }
+        if (!found) {
+          queue.push({ "distance": node.distance + edge.weight, "path": node.path.concat([edge.node]) })
+        }
       }
     }
   }
