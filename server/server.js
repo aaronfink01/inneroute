@@ -2,7 +2,6 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 const express = require('express')
-const https = require('https')
 require("dotenv").config()
 
 import { getConstantGraph, getEdges, toString, sameBuilding } from "./util.js"
@@ -118,7 +117,7 @@ app.get('/route', async (req, res) => {
     const s = path[i]
     const e = path[i + 1]
     let buildingName = sameBuilding(s, e)
-    console.log(buildingName)
+    console.log("BLDG ANME", buildingName)
     if (buildingName != "") {
       let g = getIndoorGraph(buildingName)
       let latLongMap = latlongToIndex[buildingName]
@@ -141,13 +140,13 @@ app.get('/route', async (req, res) => {
     if (currentLeg.length > 0) {
       legs.push(currentLeg)
     }
-    let result = {
-      legs: legs,
-      buildings: buildings,
-      status: "OK"
-    }
-    res.send(result)
   }
 
-})
+  let route = {
+    legs: legs,
+    buildings: buildings,
+    status: "OK"
+  }
 
+  res.send(route)
+})
