@@ -71,7 +71,9 @@ export default class Graph {
         let found = false
         for (let j = 0; j < queue.length; j++) {
           if (queue[j].path[queue[j].path.length - 1] == edge.node) {
-            queue[j].distance = min(queue[j].distance, node.distance + edge.weight)
+            if (node.distance + edge.weight < queue[j].distance) {
+              queue[j].distance = node.distance + edge.weight
+            }
             found = true
           }
         }
