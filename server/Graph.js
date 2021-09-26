@@ -73,6 +73,7 @@ export default class Graph {
           if (queue[j].path[queue[j].path.length - 1] == edge.node) {
             if (node.distance + edge.weight < queue[j].distance) {
               queue[j].distance = node.distance + edge.weight
+              break
             }
             found = true
           }
